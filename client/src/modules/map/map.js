@@ -53,7 +53,7 @@ function Maps(){
       'fillOpacity': 0.35,
       'map': gMap,
       'center': { 'lat': lat, 'lng': lng },
-      'radius': 5
+      'radius': 30
     });
     
     return tweetPoint;

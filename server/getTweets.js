@@ -27,8 +27,13 @@ module.exports = (cb) => {
       } else{
         
         nbTweetWithoutCoordinates += 1;
-        console.info(`[${new Date().toISOString().slice(0, 19)}]Tweet incomplete coordinates ${nbTweetWithoutCoordinates}`);
-        
+
+        if(nbTweetWithoutCoordinates % 100 === 0){
+
+          console.info(`[${new Date().toISOString().slice(0, 19)}]Tweet incomplete coordinates ${nbTweetWithoutCoordinates}`);
+
+        }
+
       }
 
     });

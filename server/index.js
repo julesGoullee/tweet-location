@@ -2,16 +2,16 @@
 
 const httpServe = require('./httpServe');
 const getTweet = require('./getTweets');
-const persistTweetCronTask = require('./persistTweetCronTask.js');
+const persistTweet = require('./persistTweet.js');
 const port = 4000;
 const sockets = new Set();
-const tweets = new Set();
+const tweets = new Set(persistTweet.previewData.tweets);
 
 httpServe.app.listen(port, () => {
   
   console.info(`[${new Date().toISOString().slice(0, 19)}]Api Server listen on ${port}`);
 
-  persistTweetCronTask(tweets);
+  persistTweet.cronTask(tweets);
   
   
   getTweet( (tweetData) => {
@@ -45,9 +45,13 @@ httpServe.app.listen(port, () => {
       sockets.delete(socket);
       
     });
-    
-    socket.emit('tweetsHistorique', Array.from(tweets) );
-    
+
+    socket.on('getTweetsHistorique', () => {
+
+      socket.emit('tweetsHistorique', Array.from(tweets) );
+
+    });
+
   });
   
 });
