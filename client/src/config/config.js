@@ -2,6 +2,6 @@
 
 module.exports = {
   'api': {
-    'host': 'api.tweet-location.fr'
+    'host': 'api.monchezmoi.codes'
   }
 };
