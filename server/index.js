@@ -1,16 +1,15 @@
 'use strict';
 
 const httpServe = require('./httpServe');
-
 const getTweet = require('./getTweets');
 
+const port = 4000;
 const sockets = new Set();
-
 const tweets = new Set();
 
-httpServe.app.listen(3000, () => {
+httpServe.app.listen(port, () => {
   
-  console.log(`Api Server listen on 3000`);
+  console.info(`[${new Date().toISOString().slice(0, 19)}]Api Server listen on ${port}`);
   
   getTweet( (tweetData) => {
     
@@ -22,6 +21,8 @@ httpServe.app.listen(3000, () => {
       }
     };
     
+    console.info(`[${new Date().toISOString().slice(0, 19)}]New tweet: ${JSON.stringify(tweet)}`);
+
     tweets.add(tweet);
     
     for(const socket of sockets){

@@ -16,19 +16,18 @@ module.exports = (cb) => {
 
   client.stream('statuses/filter', { 'locations': `${parisBoundingBox.sw},${parisBoundingBox.ne}` }, (stream) => {
 
-    console.log(`Listen stream of tweet from location`);
+    console.info(`[${new Date().toISOString().slice(0, 19)}]Listen stream of tweet from location`);
 
     stream.on('data', (tweet) => {
       
       if(tweet && tweet.geo && tweet.geo.coordinates){
         
-        console.log(tweet.text);
         cb(tweet);
         
       } else{
         
         nbTweetWithoutCoordinates += 1;
-        console.info(`Tweet incomplete data nb ${nbTweetWithoutCoordinates}`);
+        console.info(`[${new Date().toISOString().slice(0, 19)}]Tweet incomplete coordinates ${nbTweetWithoutCoordinates}`);
         
       }
 
