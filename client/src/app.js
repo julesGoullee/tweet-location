@@ -10,19 +10,6 @@ socket.on('connect', () => {
   
   map.draw( () => {
     
-    
-    const parisCenter = {
-      'lat': 48.8587725,
-      'lng': 2.32004486840164
-    };
-    
-    
-    setTimeout( () => {
-      
-      map.drawPoints(parisCenter.lat, parisCenter.lng);
-      
-    }, 3000);
-    
     socket.on('tweet', (tweet) => {
       
       map.drawPoints(tweet.geo.lat, tweet.geo.lng);

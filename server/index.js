@@ -2,7 +2,7 @@
 
 const httpServe = require('./httpServe');
 const getTweet = require('./getTweets');
-
+const persistTweetCronTask = require('./persistTweetCronTask.js');
 const port = 4000;
 const sockets = new Set();
 const tweets = new Set();
@@ -10,6 +10,9 @@ const tweets = new Set();
 httpServe.app.listen(port, () => {
   
   console.info(`[${new Date().toISOString().slice(0, 19)}]Api Server listen on ${port}`);
+
+  persistTweetCronTask(tweets);
+  
   
   getTweet( (tweetData) => {
     
@@ -17,7 +20,7 @@ httpServe.app.listen(port, () => {
       'geo': {
         'lat': tweetData.geo.coordinates[0],
         'lng': tweetData.geo.coordinates[1],
-        'create_at': tweetData.create_at
+        'create_at': tweetData.created_at
       }
     };
     
