@@ -12,17 +12,13 @@ socket.on('connect', () => {
 
     socket.on('tweet', (tweet) => {
 
-      map.drawPoints(tweet.geo.lat, tweet.geo.lng);
+      map.drawPoint(tweet.geo.lat, tweet.geo.lng, new Date(tweet.create_at), tweet.text);
 
     });
 
     socket.on('tweetsHistorique', (tweets) => {
 
-      for(const tweet of tweets){
-
-        map.drawPoints(tweet.geo.lat, tweet.geo.lng);
-
-      }
+      map.drawHistoriquePoints(tweets);
 
     });
 
