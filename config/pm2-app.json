@@ -1,0 +1,16 @@
+{
+  "apps" : [
+    {
+      "name"      : "api",
+      "script"    : "./server/index.js",
+      "env": {
+        "NODE_ENV": "production",
+        "API_PORT": 3000
+      },
+      "exec_mode"  : "fork_mode",
+      "error_file" : "./logs/api-err.log",
+      "out_file"   : "./logs/api-out.log",
+      "pid_file"   : "./logs/api.pid"
+    }
+  ]
+}
