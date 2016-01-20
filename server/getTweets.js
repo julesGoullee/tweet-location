@@ -19,13 +19,13 @@ module.exports = (cb) => {
     console.info(`[${new Date().toISOString().slice(0, 19)}]Listen stream of tweet from location`);
 
     stream.on('data', (tweet) => {
-      
-      if(tweet && tweet.geo && tweet.geo.coordinates){
-        
+
+      if(tweet && tweet.geo && tweet.geo.coordinates && tweet.text){
+
         cb(tweet);
-        
+
       } else{
-        
+
         nbTweetWithoutCoordinates += 1;
 
         if(nbTweetWithoutCoordinates % 100 === 0){
