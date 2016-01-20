@@ -10,6 +10,7 @@
     "start": "node server/index.js",
     "lint": "eslint . --fix",
     "test": "npm run lint",
+    "build": "gulp build",
     "test-unit": "mocha -R spec ./test/unit/test.config.js ./test/unit/**/*.js"
   },
   "keywords": [
