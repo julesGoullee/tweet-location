@@ -71,11 +71,13 @@ gulp.task('webpack', (cb) => {
   
 });
 
-gulp.task('dev-front-w', ['static', 'webpack'], () => {
+gulp.task('build', ['static', 'webpack']);
+
+gulp.task('dev-front-w', ['build'], () => {
   
   gulp.watch([
     'client/src/**/*.js'
-  ], ['static', 'webpack']);
+  ], ['build']);
 
 });
 
