@@ -25,6 +25,7 @@ module.exports = (cb) => {
     stream.on('data', (tweet) => {
       
       if(tweet && tweet.geo && tweet.geo.coordinates){
+        
         console.log(tweet.text);
         cb(tweet);
         

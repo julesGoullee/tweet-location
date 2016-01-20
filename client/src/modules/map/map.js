@@ -56,6 +56,8 @@ function Maps(){
       'radius': 5
     });
     
+    return tweetPoint;
+    
   };
   
 }
