@@ -3,6 +3,7 @@
 const http = require('http');
 const socketIo = require('socket.io');
 
+const predictionRoute = require('./predictionRoute');
 
 /**
  * Request handler
@@ -10,11 +11,9 @@ const socketIo = require('socket.io');
  * @param {Object} res - response object
  */
 function handler(req, res){
-
-  console.log(`New request`);
-  res.writeHead(200, { 'Content-Type': 'text/html' });
-  res.end('ok');
-
+  
+  predictionRoute(req, res);
+  
 }
 
 const app = http.createServer(handler);
