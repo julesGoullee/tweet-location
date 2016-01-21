@@ -3,16 +3,16 @@
 const fs = require('fs');
 const path = require('path');
 const dataFilePath = './config/data.json';
-const previewData = require(path.resolve(__dirname, '../', dataFilePath) );
+const previewData = require(path.resolve(__dirname, '../../../', dataFilePath) );
+const data = new Set(previewData.tweets);
 
 /**
  * saveTweets cron tasj
- * @param {Set} tweets - set of tweet Object
  */
-function saveTweets(tweets){
+function saveTweets(){
 
   const tweetsString = JSON.stringify({
-    'tweets': Array.from(tweets)
+    'tweets': Array.from(data)
   });
 
   fs.writeFile(dataFilePath, tweetsString, (err) => {
@@ -33,16 +33,15 @@ function saveTweets(tweets){
 
 /**
  * launch interval task
- * @param {Set} tweets - set of tweet Object
  */
-function cronTask(tweets){
+function cronTask(){
 
   setInterval( () => {
 
-    saveTweets(tweets);
+    saveTweets();
 
-  }, 60 * 60 * 1000);
+  }, 30 * 60 * 1000);
 
 }
 
-module.exports = { cronTask, previewData };
+module.exports = { cronTask, data };

@@ -1,7 +1,7 @@
 'use strict';
 
 const Twitter = require('twitter');
-const account = require('../config/account.json');
+const account = require('../../../config/account.json');
 
 const client = new Twitter(account);
 
@@ -22,7 +22,16 @@ module.exports = (cb) => {
 
       if(tweet && tweet.geo && tweet.geo.coordinates && tweet.text){
 
-        cb(tweet);
+        const tweetClean = {
+          'create_at': tweet.created_at,
+          'text': tweet.text,
+          'geo': {
+            'lat': tweet.geo.coordinates[0],
+            'lng': tweet.geo.coordinates[1]
+          }
+        };
+
+        cb(tweetClean);
 
       } else{
 

@@ -1,32 +1,22 @@
 'use strict';
 
-const httpServe = require('./httpServe');
-const getTweet = require('./getTweets');
-const persistTweet = require('./persistTweet.js');
-const port = 4000;
+const httpServe = require('./modules/httpServe');
+const fetch = require('./modules/tweets/fetch');
+const storage = require('./modules/tweets/storage');
 const sockets = new Set();
-const tweets = new Set(persistTweet.previewData.tweets);
+const port = 4000;
 
 httpServe.app.listen(port, () => {
 
   console.info(`[${new Date().toISOString().slice(0, 19)}]Api Server listen on ${port}`);
 
-  persistTweet.cronTask(tweets);
+  storage.cronTask();
 
-  getTweet( (tweetData) => {
-
-    const tweet = {
-      'create_at': tweetData.created_at,
-      'text': tweetData.text,
-      'geo': {
-        'lat': tweetData.geo.coordinates[0],
-        'lng': tweetData.geo.coordinates[1]
-      }
-    };
+  fetch( (tweet) => {
 
     console.info(`[${new Date().toISOString().slice(0, 19)}]New tweet: ${JSON.stringify(tweet)}`);
 
-    tweets.add(tweet);
+    storage.data.add(tweet);
 
     for(const socket of sockets){
 
@@ -48,7 +38,7 @@ httpServe.app.listen(port, () => {
 
     socket.on('getTweetsHistorique', () => {
 
-      socket.emit('tweetsHistorique', Array.from(tweets) );
+      socket.emit('tweetsHistorique', Array.from(storage.data) );
 
     });
 
