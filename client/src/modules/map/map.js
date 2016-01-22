@@ -2,6 +2,7 @@
 
 const GoogleMapsLoader = require('google-maps'); // only for common js environments
 
+const config = require('config');
 const getColorFromTime = require('tweet/getColorFromTime.js');
 
 GoogleMapsLoader.KEY = 'AIzaSyBK72So3KURSZ1SjDXdLp-5LqJp3E0CFrc';
@@ -118,6 +119,54 @@ function Maps(){
 
   };
 
+  /**
+   * On clique map for prediction at this point
+   */
+  this.onClickPrediction = () => {
+
+    gMap.addListener('click', (event) => {
+      
+      const circle = new google.maps.Circle({
+        'strokeColor': '#FF7E00',
+        'strokeOpacity': 0.8,
+        'strokeWeight': 2,
+        'fillColor': '#FF7E00',
+        'fillOpacity': 0.35,
+        'map': gMap,
+        'radius': 120
+      });
+      
+      const infoWindow = new google.maps.InfoWindow();
+
+      infoWindow.open(gMap);
+        
+
+      circle.setCenter(event.latLng);
+      infoWindow.setPosition(event.latLng);
+      infoWindow.setContent('Wait api works...');
+        
+      const jsonGeo = event.latLng.toJSON();
+      
+      fetch(`//${config.api.host}/geoPrediction?lat=${jsonGeo.lat}&lng=${jsonGeo.lng}`).then( (res) => {
+       
+        if(res.status !== 200){
+
+          console.error(res);
+
+        }
+        
+        return res.json();
+        
+      }).then( (resJson) => {
+
+        infoWindow.setContent(resJson.time);
+        
+      });
+      
+    });
+    
+  };
+  
 }
 
 module.exports = Maps;

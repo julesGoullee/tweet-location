@@ -19,7 +19,8 @@ socket.on('connect', () => {
     socket.on('tweetsHistorique', (tweets) => {
 
       map.drawHistoriquePoints(tweets);
-
+      map.onClickPrediction();
+      
     });
 
     socket.emit('getTweetsHistorique');
