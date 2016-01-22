@@ -21,7 +21,8 @@ function Maps(){
 
   let google = null;
   let gMap = null;
-
+  let apiPredictionWork = false;
+  
   /**
    * Draw - create gmaps
    * @param {Function} cb - callback on google maps created
@@ -143,8 +144,25 @@ function Maps(){
 
       circle.setCenter(event.latLng);
       infoWindow.setPosition(event.latLng);
-      infoWindow.setContent('Wait api works...');
+
+      infoWindow.addListener('closeclick', () => {
+
+        circle.setMap(null);
+
+      });
+      
+      if(apiPredictionWork){
         
+        return infoWindow.setContent('One call once!');
+        
+      } else{//eslint-disable-line
+        
+        apiPredictionWork = true;
+        infoWindow.setContent('Wait api works...');
+
+      }
+      
+      
       const jsonGeo = event.latLng.toJSON();
       
       fetch(`//${config.api.host}/geoPrediction?lat=${jsonGeo.lat}&lng=${jsonGeo.lng}`).then( (res) => {
@@ -158,7 +176,8 @@ function Maps(){
         return res.json();
         
       }).then( (resJson) => {
-
+        
+        apiPredictionWork = false;
         infoWindow.setContent(resJson.time);
         
       });
