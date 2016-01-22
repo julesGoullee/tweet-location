@@ -49,7 +49,8 @@ module.exports = {
   },
 
   'globals': {
-    'expect' : true,
+    'expect': true,
+    'fetch': true,
     'document': true
   },
 
