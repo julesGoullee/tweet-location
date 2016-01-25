@@ -43,7 +43,7 @@ function PredictionHandler(req, res){
   
   const geoPrediction = { 'lat': req.url.query.lat, 'lng': req.url.query.lng };
   
-  console.info(`New request prediction for:${geoPrediction}`);
+  console.info(`New request prediction for:${JSON.stringify(geoPrediction)}`);
 
   const time = Prediction.testGeo(geoPrediction);
   
