@@ -1,29 +1,29 @@
 'use strict';
 
-const socket = require('connector/connector.js');
+const connectors = require('connectors/connectors.js');
 
 const Map = require('map/map.js');
 
-socket.on('connect', () => {
+connectors.realTime.on('connect', () => {
 
   const map = new Map();
 
   map.draw( () => {
 
-    socket.on('tweet', (tweet) => {
+    connectors.realTime.on('tweet', (tweet) => {
 
       map.drawPoint(tweet.geo.lat, tweet.geo.lng, new Date(tweet.create_at), tweet.text);
 
     });
 
-    socket.on('tweetsHistorique', (tweets) => {
+    connectors.realTime.on('tweetsHistorique', (tweets) => {
 
       map.drawHistoriquePoints(tweets);
       map.onClickPrediction();
-      
+
     });
 
-    socket.emit('getTweetsHistorique');
+    connectors.realTime.emit('getTweetsHistorique');
 
   });
 

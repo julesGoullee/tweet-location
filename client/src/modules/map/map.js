@@ -4,13 +4,9 @@ const GoogleMapsLoader = require('google-maps'); // only for common js environme
 
 const config = require('config');
 const getColorFromTime = require('tweet/getColorFromTime.js');
+const connectors = require('connectors/connectors.js');
 
-GoogleMapsLoader.KEY = 'AIzaSyBK72So3KURSZ1SjDXdLp-5LqJp3E0CFrc';
-
-const parisCenter = {
-  'lat': 48.8587725,
-  'lng': 2.32004486840164
-};
+GoogleMapsLoader.KEY = config.map.gMapsKey;
 
 const mapsNode = document.getElementById('map');
 
@@ -21,8 +17,7 @@ function Maps(){
 
   let google = null;
   let gMap = null;
-  let apiPredictionWork = false;
-  
+
   /**
    * Draw - create gmaps
    * @param {Function} cb - callback on google maps created
@@ -35,7 +30,7 @@ function Maps(){
 
       const gMapsOpt = {
         'zoom': 13,
-        'center': new google.maps.LatLng(parisCenter.lat, parisCenter.lng),
+        'center': new google.maps.LatLng(config.map.center.lat, config.map.center.lng),
         'mapTypeId': google.maps.MapTypeId.ROADMAP,
         'zoomControl': true,
         'mapTypeControl': false,
@@ -116,12 +111,13 @@ function Maps(){
       infowindow.open(gMap);
 
     });
+
     return tweetPoint;
 
   };
 
   /**
-   * On clique map for prediction at this point
+   * On click map for prediction at this point
    */
   this.onClickPrediction = () => {
 
@@ -134,54 +130,36 @@ function Maps(){
         'fillColor': '#FF7E00',
         'fillOpacity': 0.35,
         'map': gMap,
-        'radius': 120
+        'radius': 120,
+        'center': event.latLng
       });
       
-      const infoWindow = new google.maps.InfoWindow();
+      const infoWindow = new google.maps.InfoWindow({
+        'position': event.latLng
+      });
+
+      infoWindow.setContent('Wait api works...');
 
       infoWindow.open(gMap);
-        
-
-      circle.setCenter(event.latLng);
-      infoWindow.setPosition(event.latLng);
 
       infoWindow.addListener('closeclick', () => {
 
         circle.setMap(null);
 
       });
-      
-      if(apiPredictionWork){
-        
-        return infoWindow.setContent('One call once!');
-        
-      } else{//eslint-disable-line
-        
-        apiPredictionWork = true;
-        infoWindow.setContent('Wait api works...');
 
-      }
-      
-      
       const jsonGeo = event.latLng.toJSON();
-      
-      fetch(`//${config.api.host}/geoPrediction?lat=${jsonGeo.lat}&lng=${jsonGeo.lng}`).then( (res) => {
-       
-        if(res.status !== 200){
 
-          console.error(res);
+      connectors.prediction.geo(jsonGeo.lat, jsonGeo.lng).then( (time) => {
 
-        }
-        
-        return res.json();
-        
-      }).then( (resJson) => {
-        
-        apiPredictionWork = false;
-        infoWindow.setContent(resJson.time);
-        
+        infoWindow.setContent(time);
+
+      }, (err) => {
+
+        infoWindow.setContent(err);
+
       });
-      
+
     });
     
   };
