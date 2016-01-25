@@ -2,12 +2,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const dataFilePath = './config/data.json';
+const dataFilePath = './server/data/data.json';
 const previewData = require(path.resolve(__dirname, '../../../', dataFilePath) );
 const data = new Set(previewData.tweets);
 
 /**
- * saveTweets cron tasj
+ * saveTweets cron task
  */
 function saveTweets(){
 
